@@ -6,4 +6,4 @@ RUN apt-get install nginx -y
 EXPOSE 80
 
 ENTRYPOINT [ "/usr/sbin/nginx", "-g", "daemon off;"]
-CMD [ "-h" ]
+WORKDIR /etc
