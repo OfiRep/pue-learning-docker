@@ -1,0 +1,40 @@
+version: '3.7'
+
+services:
+  nginx_reverse_proxy:
+    build:
+      context: ./pue_nginx_reverse_proxy
+    image: pues/nginxreverseproxy
+    container_name: pue_reverse_proxy
+    ports:
+      - "80:80"
+
+  nginx_web_server:
+    image: nginx:1.13.9-alpine
+    
+  cadvisor:
+    image: google/cadvisor:latest
+    container_name: pue_cadvisor
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    #ports:
+    #  - "8080:8080"
+
+  portainer:
+    image: portainer/portainer
+    container_name: pue_portainer
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    #ports:
+    #  - "8081:9000"
+    restart: always
+
+volumes:
+  portainer_data:
+    external: true
+    name: portainer_data   
